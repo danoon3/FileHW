@@ -5,10 +5,15 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        String[] products = {"Молоко", "Хлеб", "Колбаса", "Вода"};
-        int[] prices = {100, 40, 150, 50};
+        String[] products = {"Молоко", "Хлеб", "Колбаса", "Вода", "Сухарики", "Сметана"};
+        int[] prices = {100, 40, 150, 50, 30, 120};
         Basket basket = new Basket(prices, products);
+
         File file = new File("./basket.txt");
+
+        if(file.exists()){
+            basket = Basket.loadFromTextFile(file);
+        }
 
         System.out.println("Список возможных для покупки товаров");
         for (int i = 0; i < products.length; i++) {

@@ -1,14 +1,14 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Basket {
-    private int[] prices;
-    private String[] products;
-    private int[] countOfAllProducts;
-    private int[] costOfOneProduct;
-    private boolean[] isFilled;
+    private static int[] prices;
+    private static String[] products;
+    private static int[] countOfAllProducts;
+    private static int[] costOfOneProduct;
+    private static boolean[] isFilled;
+    private static int[] numbersFromFile;
     private int sum = 0;
 
     public Basket(int[] prices, String[] products) {
@@ -18,6 +18,7 @@ public class Basket {
         costOfOneProduct = new int[products.length];
         isFilled = new boolean[products.length];
     }
+
 
     public void addToCart(int productNum, int amount) {
         int productCost = amount * prices[productNum];
@@ -54,17 +55,29 @@ public class Basket {
     }
 
     static Basket loadFromTextFile(File textFile) throws IOException {
+        Basket basket = new Basket(prices, products);
         try (FileReader fileReader = new FileReader(textFile)) {
             Scanner scanner = new Scanner(fileReader);
             while (scanner.hasNextLine()) {
                 String input = scanner.nextLine();
-                int[] numbersFromFile = Arrays.stream(input.split(" "))
+                numbersFromFile = Arrays.stream(input.split(" "))
                         .mapToInt(Integer::parseInt)
                         .toArray();
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-        return null;
+        for (int i = 0; i < numbersFromFile.length; i++) {
+            basket.addToCart(i, numbersFromFile[i]);
+        }
+        return basket;
+    }
+
+    public int[] getPrices() {
+        return prices;
+    }
+
+    public String[] getProducts() {
+        return products;
     }
 }
