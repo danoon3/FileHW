@@ -9,10 +9,10 @@ public class Main {
         int[] prices = {100, 40, 150, 50, 30, 120};
         Basket basket = new Basket(prices, products);
 
-        File file = new File("./basket.txt");
+        File file = new File("./basket.bin");
 
         if (file.exists()) {
-            basket = Basket.loadFromTextFile(file);
+            basket = Basket.loadFromBinFile(file);
         }
 
         System.out.println("Список возможных для покупки товаров");
@@ -32,7 +32,7 @@ public class Main {
             int productNumber = Integer.parseInt(numbers[0]) - 1;
             int productCount = Integer.parseInt(numbers[1]);
             basket.addToCart(productNumber, productCount);
-            basket.saveTxt(file);
+            basket.saveBin(file, basket);
         }
         basket.printCar();
     }

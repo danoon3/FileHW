@@ -2,7 +2,8 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Basket {
+public class Basket implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static int[] prices;
     private static String[] products;
     private static int[] countOfAllProducts;
@@ -43,35 +44,26 @@ public class Basket {
         System.out.println("Итого: " + sum + " руб.");
     }
 
-    public void saveTxt(File textFile) throws IOException {
-        try (FileWriter fileWriter = new FileWriter(textFile)) {
-            for (int i : countOfAllProducts) {
-                fileWriter.write(i + " ");
-                fileWriter.flush();
-            }
-        } catch (IOException ex) {
+    public void saveBin(File binFile, Basket basket) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(binFile);
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
+            objectOutputStream.writeObject(basket);
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    static Basket loadFromTextFile(File textFile) throws IOException {
-        Basket basket = new Basket(prices, products);
-        try (FileReader fileReader = new FileReader(textFile)) {
-            Scanner scanner = new Scanner(fileReader);
-            while (scanner.hasNextLine()) {
-                String input = scanner.nextLine();
-                numbersFromFile = Arrays.stream(input.split(" "))
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
-            }
-        } catch (IOException ex) {
+    static Basket loadFromBinFile(File binFile) {
+        Basket basket = null;
+        try (FileInputStream fileInputStream = new FileInputStream(binFile);
+             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+            basket = (Basket) objectInputStream.readObject();
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
-        }
-        for (int i = 0; i < numbersFromFile.length; i++) {
-            basket.addToCart(i, numbersFromFile[i]);
         }
         return basket;
     }
+
 
     public int[] getPrices() {
         return prices;
