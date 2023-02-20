@@ -11,7 +11,7 @@ public class Main {
 
         File file = new File("./basket.txt");
 
-        if(file.exists()){
+        if (file.exists()) {
             basket = Basket.loadFromTextFile(file);
         }
 

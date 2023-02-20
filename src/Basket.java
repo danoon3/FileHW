@@ -68,7 +68,9 @@ public class Basket {
             System.out.println(ex.getMessage());
         }
         for (int i = 0; i < numbersFromFile.length; i++) {
-            basket.addToCart(i, numbersFromFile[i]);
+            if (numbersFromFile[i] != 0) {
+                basket.addToCart(i, numbersFromFile[i]);
+            }
         }
         return basket;
     }
