@@ -31,7 +31,7 @@ public class Basket {
         System.out.println("Ваша корзина: ");
         for (int i = 0; i < isFilled.length; i++) {
             {
-                if (isFilled[i] == true) {
+                if (isFilled[i]) {
                     System.out.println(products[i] + " " + countOfAllProducts[i] + " шт " +
                             prices[i] + " руб/шт " + costOfOneProduct[i] + " руб в сумме");
                 }
