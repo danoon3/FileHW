@@ -4,12 +4,12 @@ import java.util.Scanner;
 
 public class Basket implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static int[] prices;
-    private static String[] products;
-    private static int[] countOfAllProducts;
-    private static int[] costOfOneProduct;
-    private static boolean[] isFilled;
-    private static int[] numbersFromFile;
+    private int[] prices;
+    private String[] products;
+    private int[] countOfAllProducts;
+    private int[] costOfOneProduct;
+    private boolean[] isFilled;
+    private int[] numbersFromFile;
     private int sum = 0;
 
     public Basket(int[] prices, String[] products) {
@@ -44,10 +44,20 @@ public class Basket implements Serializable {
         System.out.println("Итого: " + sum + " руб.");
     }
 
-    public void saveBin(File binFile, Basket basket) {
+    public void saveBin(File binFile) {
+        prices = getPrices();
+        products = getProducts();
+        int[] countOfProductsFromBin = getCountOfAllProducts();
         try (FileOutputStream fileOutputStream = new FileOutputStream(binFile);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
+            Basket basket = new Basket(prices, products);
+            for (int i = 0; i < countOfProductsFromBin.length; i++) {
+                if (countOfProductsFromBin[i] != 0) {
+                    basket.addToCart(i, countOfProductsFromBin[i]);
+                }
+            }
             objectOutputStream.writeObject(basket);
+            objectOutputStream.flush();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -64,6 +74,9 @@ public class Basket implements Serializable {
         return basket;
     }
 
+    public int[] getCountOfAllProducts() {
+        return countOfAllProducts;
+    }
 
     public int[] getPrices() {
         return prices;

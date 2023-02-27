@@ -32,7 +32,7 @@ public class Main {
             int productNumber = Integer.parseInt(numbers[0]) - 1;
             int productCount = Integer.parseInt(numbers[1]);
             basket.addToCart(productNumber, productCount);
-            basket.saveBin(file, basket);
+            basket.saveBin(file);
         }
         basket.printCar();
     }
