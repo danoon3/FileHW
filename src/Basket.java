@@ -50,13 +50,7 @@ public class Basket implements Serializable {
         int[] countOfProductsFromBin = getCountOfAllProducts();
         try (FileOutputStream fileOutputStream = new FileOutputStream(binFile);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-            Basket basket = new Basket(prices, products);
-            for (int i = 0; i < countOfProductsFromBin.length; i++) {
-                if (countOfProductsFromBin[i] != 0) {
-                    basket.addToCart(i, countOfProductsFromBin[i]);
-                }
-            }
-            objectOutputStream.writeObject(basket);
+            objectOutputStream.writeObject(this);
             objectOutputStream.flush();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
