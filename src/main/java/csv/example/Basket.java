@@ -1,6 +1,13 @@
+package csv.example;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.*;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class Basket {
     private int[] prices;
@@ -32,8 +39,7 @@ public class Basket {
         for (int i = 0; i < isFilled.length; i++) {
             {
                 if (isFilled[i] == true) {
-                    System.out.println(products[i] + " " + countOfAllProducts[i] + " шт " +
-                            prices[i] + " руб/шт " + costOfOneProduct[i] + " руб в сумме");
+                    System.out.println(products[i] + " " + countOfAllProducts[i] + " шт " + prices[i] + " руб/шт " + costOfOneProduct[i] + " руб в сумме");
                 }
             }
         }
@@ -45,6 +51,7 @@ public class Basket {
 
     public void saveTxt(File textFile) throws IOException {
         try (FileWriter fileWriter = new FileWriter(textFile)) {
+
             StringBuilder sb = new StringBuilder();
             for (int i : prices) {
                 sb.append(i).append(" ");
@@ -74,20 +81,14 @@ public class Basket {
         int[] pricesFromFile = new int[]{};
         String[] productsFromFile = new String[]{};
         int[] numbersFromFile = new int[]{};
-        try (FileReader fileReader = new FileReader(textFile);
-             BufferedReader br = new BufferedReader(fileReader)) {
+        try (FileReader fileReader = new FileReader(textFile); BufferedReader br = new BufferedReader(fileReader)) {
             String line = br.readLine();
             while (line != null) {
-                pricesFromFile = Arrays.stream(line.split(" "))
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
+                pricesFromFile = Arrays.stream(line.split(" ")).mapToInt(Integer::parseInt).toArray();
                 line = br.readLine();
-                productsFromFile = Arrays.stream(line.split(" "))
-                        .toArray(String[]::new);
+                productsFromFile = Arrays.stream(line.split(" ")).toArray(String[]::new);
                 line = br.readLine();
-                numbersFromFile = Arrays.stream(line.split(" "))
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
+                numbersFromFile = Arrays.stream(line.split(" ")).mapToInt(Integer::parseInt).toArray();
                 line = br.readLine();
             }
             Basket basket = new Basket(pricesFromFile, productsFromFile);
@@ -99,6 +100,7 @@ public class Basket {
             return basket;
         }
     }
+
 
     public int[] getPrices() {
         return prices;
