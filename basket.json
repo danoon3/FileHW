@@ -1,1 +1,1 @@
-{"prices":[100,40,150,50,30,120],"products":["Молоко","Хлеб","Колбаса","Вода","Сухарики","Сметана"],"countOfAllProducts":[4,0,8,0,12,0],"costOfOneProduct":[400,0,1200,0,360,0],"isFilled":[true,false,true,false,true,false],"sum":0}
+{"prices":[100,40,150,50,30,120],"products":["Молоко","Хлеб","Колбаса","Вода","Сухарики","Сметана"],"countOfAllProducts":[1,2,3,4,5,0],"costOfOneProduct":[100,80,450,200,150,0],"isFilled":[true,true,true,true,true,false],"sum":0}

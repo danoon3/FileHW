@@ -1,41 +1,31 @@
 package csv.example;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         String[] products = {"Молоко", "Хлеб", "Колбаса", "Вода", "Сухарики", "Сметана"};
         int[] prices = {100, 40, 150, 50, 30, 120};
         Basket basket = new Basket(prices, products);
         ClientLog clientLog = new ClientLog();
+        jsonFileWorker jsonFileWorker = new jsonFileWorker();
+        myXMLReader myXMLReader = new myXMLReader();
 
-        File file = new File("./basket.txt");
-        File fileCSV = new File("./log.csv");
-        File fileJSON = new File("./basket.json");
+        myXMLReader.read();
 
-        if (fileJSON.exists()) {
-            JSONParser parser = new JSONParser();
-            try {
-                Object obj = parser.parse(new FileReader(fileJSON));
-                JSONObject jsonObject = (JSONObject) obj;
-                String jsonText = String.valueOf(jsonObject);
+        File file = new File(myXMLReader.getFileNameLoad());
+        File fileCSV = new File(myXMLReader.getFileNameLog());
 
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                basket = gson.fromJson(jsonText, Basket.class);
-            } catch (IOException | ParseException e) {
-                e.getMessage();
+        if (file.exists()) {
+            if (myXMLReader.getEnabledLoad().equals("true")) {
+                if (myXMLReader.getFormatLoad().equals("json")) {
+                    basket = jsonFileWorker.loadFromJSON(file, basket);
+                } else if (myXMLReader.getFormatLoad().equals("text")) {
+                    basket = Basket.loadFromTextFile(file);
+                }
             }
         }
 
@@ -48,7 +38,6 @@ public class Main {
             System.out.println("Выберите товар и количество или введите 'end'");
             String input = scanner.nextLine();
             if ("end".equals(input)) {
-                clientLog.exportAsCSV(fileCSV);
                 break;
             }
 
@@ -57,16 +46,21 @@ public class Main {
             int productNumber = Integer.parseInt(numbers[0]) - 1;
             int productCount = Integer.parseInt(numbers[1]);
 
-            clientLog.log(productNumber + 1, productCount);
-
             basket.addToCart(productNumber, productCount);
 
-            try (FileWriter fileWriter = new FileWriter(fileJSON)) {
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                fileWriter.write(gson.toJson(basket));
-                fileWriter.flush();
+            if (myXMLReader.getEnabledLog().equals("true")) {
+                clientLog.log(productNumber + 1, productCount);
+                clientLog.exportAsCSV(fileCSV);
             }
+
+            if (myXMLReader.getEnabledSave().equals("true")) {
+                if (myXMLReader.getFormatSave().equals("json")) {
+                    jsonFileWorker.saveToJSON(file, basket);
+                } else if (myXMLReader.getFormatSave().equals("text")) {
+                    basket.saveTxt(file);
+                }
+            }
+
         }
         basket.printCar();
     }

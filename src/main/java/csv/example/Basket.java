@@ -1,11 +1,5 @@
 package csv.example;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.*;
 import java.util.Arrays;
 
@@ -15,7 +9,6 @@ public class Basket {
     private int[] countOfAllProducts;
     private int[] costOfOneProduct;
     private boolean[] isFilled;
-    private int[] numbersFromFile;
     private int sum = 0;
 
     public Basket(int[] prices, String[] products) {
@@ -49,7 +42,7 @@ public class Basket {
         System.out.println("Итого: " + sum + " руб.");
     }
 
-    public void saveTxt(File textFile) throws IOException {
+    public void saveTxt(File textFile) {
         try (FileWriter fileWriter = new FileWriter(textFile)) {
 
             StringBuilder sb = new StringBuilder();
@@ -100,7 +93,6 @@ public class Basket {
             return basket;
         }
     }
-
 
     public int[] getPrices() {
         return prices;
